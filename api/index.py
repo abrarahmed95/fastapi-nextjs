@@ -1,15 +1,21 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
-app = FastAPI()
+router = APIRouter(
+    prefix="/api",
+    responses={404: {"description": "Not found"}},
+)
 
-
-@app.get("/")
+@router.get("/")
 async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
+@router.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+
+app = FastAPI()
+app.include_router(router)
